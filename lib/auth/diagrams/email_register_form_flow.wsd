@@ -1,0 +1,37 @@
+@startuml "註冊FLOW"
+title "註冊流程 (Email Register Form Flow)"
+
+start
+  :從" 登入 "的 "註冊" 按鈕导航到注册页面1;
+note right
+  <color: red> 如果是從簡訊驗證面面進入Register 1， 
+  <color: red> 流程終點跳到首頁，反之跳到Register 2
+  context.go('login/register/1')
+end note
+:输入Email;
+:输入密碼;
+:输入確認密碼;
+ 
+ partition FirebaseAuth {
+  :點擊 "註冊" 按鈕;
+  note right
+    [[https://firebase.google.com/docs/auth/flutter/email-link-auth?hl=zh-tw, createUserWithEmailAndPassword]]
+    [[https://firebase.flutter.dev/docs/auth/usage/, credential.user?.sendEmailVerification()]]
+  end note
+
+  if (註冊成功) then (是)
+    
+    :導航到Email 認證頁面;
+    note right
+      context.go('/register/email_verify', extra: _emailController.text);
+    end note
+  else (否)
+    :顯示錯誤信息;
+    end
+  endif
+ }
+ 
+ 
+
+stop
+@enduml

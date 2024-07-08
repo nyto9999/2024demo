@@ -1,0 +1,38 @@
+@startuml "登录FLOW"
+title "登录流程 (Login Form Flow)"
+
+start
+
+:登录页面;
+
+:输入Email;
+
+:输入密码;
+
+:点击 "登录" 按钮;
+ 
+if (登入) then (成功)
+ 
+if (
+  Email 認證
+  credential.user?.emailVerified
+  ) then (是)
+  :导航到首页;
+  note right
+    context.go('/')
+  end note
+else (否)
+  :導航到Email 認證頁面;
+  note right
+    context.go('/register/email_verify', extra: _emailController.text);
+  end note
+end
+
+endif
+else (失敗)
+  :显示错误信息;
+  stop
+endif
+
+stop
+@enduml

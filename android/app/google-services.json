@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "548071695548",
+    "firebase_url": "https://house-ff670-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "house-ff670",
+    "storage_bucket": "house-ff670.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548071695548:android:61107541c193d62a1e9cb9",
+        "android_client_info": {
+          "package_name": "com.example.house"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "548071695548-f5tm8d43utdq9t7pvjjv7q66me2ufnbe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.house",
+            "certificate_hash": "831033a310fafa3e09cbb7c2f8b49d24804617d4"
+          }
+        },
+        {
+          "client_id": "548071695548-h63suajakjk3ftr5lnqfraeqdmv6vhe3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW_mUPH9hoSAPOrfuObNzhRPfliFZA3ps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "548071695548-h63suajakjk3ftr5lnqfraeqdmv6vhe3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "548071695548-c5pbpdr4gtqjcvcm2tmhif4iiv19l3vn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.house"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
