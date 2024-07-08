@@ -7,6 +7,7 @@ class EmailRegisterForm extends StatefulWidget {
     super.key,
     required this.authUsecases,
   });
+
   final AuthUsecases authUsecases;
 
   @override
@@ -14,10 +15,60 @@ class EmailRegisterForm extends StatefulWidget {
 }
 
 class _EmailRegisterFormState extends State<EmailRegisterForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _passwordController = TextEditingController();
+
+  ElevatedButton _registerButton(BuildContext context) {
+    return ElevatedButton(
+                onPressed: () async {
+                  try {
+                    final credential = await widget.authUsecases.register
+                        .createUserWithEmailAndPassword(
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                    );
+
+                    await credential.user?.sendEmailVerification();
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      context.go('/register/email_verify',
+                          extra: _emailController.text);
+                    });
+                  } catch (e) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('$e'),
+                        ),
+                      );
+                    });
+                  }
+                },
+                child: const Text('註冊'),
+              );
+  }
+
+  TextField _confirmPassword() {
+    return TextField(
+                controller: _confirmPasswordController,
+                decoration: const InputDecoration(labelText: '確認密碼'),
+              );
+  }
+
+  TextField _passwordTextfield() {
+    return TextField(
+                controller: _passwordController,
+                decoration: const InputDecoration(labelText: '密碼'),
+              );
+  }
+
+  TextField _emailTextfield() {
+    return TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+              );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,44 +82,10 @@ class _EmailRegisterFormState extends State<EmailRegisterForm> {
             key: _formKey,
             child: Column(
               children: [
-                TextField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
-                ),
-                TextField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(labelText: '密碼'),
-                ),
-                TextField(
-                  controller: _confirmPasswordController,
-                  decoration: const InputDecoration(labelText: '確認密碼'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      final credential = await widget.authUsecases.register
-                          .createUserWithEmailAndPassword(
-                        email: _emailController.text,
-                        password: _passwordController.text,
-                      );
-
-                      await credential.user?.sendEmailVerification();
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        context.go('/register/email_verify',
-                            extra: _emailController.text);
-                      });
-                    } catch (e) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('$e'),
-                          ),
-                        );
-                      });
-                    }
-                  },
-                  child: const Text('註冊'),
-                ),
+                _emailTextfield(),
+                _passwordTextfield(),
+                _confirmPassword(),
+                _registerButton(context),
               ],
             )),
       ),

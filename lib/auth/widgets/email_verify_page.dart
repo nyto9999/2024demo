@@ -26,7 +26,6 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
          
           ElevatedButton(
               onPressed: () {
-                //go to login page
                 context.go('/login');
               },
               child: const Text('回登入頁面'))

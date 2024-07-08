@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:house/auth/usecases/firebase_auth_error_translator.dart';
 
-/// - [注册流程 - 第一步](file://./../diagrams/register_1_phone_flow.wsd)
-/// - [注册流程 - 第二步](file://./../diagrams/register_2_password_flow.wsd)
+/// - [注册流程 - 第一步](file://./../diagrams/email_register_form_flow.wsd)
 
 //這邊的signIn 都是發送驗證碼
 //sendSms 確認之後才會真正SignIn
@@ -25,19 +25,7 @@ class RegisterUsecases {
       );
       return credential;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        throw '此信箱已被使用';
-      } else if (e.code == 'weak-password') {
-        throw '密碼強度不足';
-      } else if (e.code == 'operation-not-allowed') {
-        throw '此操作未被允許';
-      } else if (e.code == 'missing-password') {
-        throw '請輸入密碼';
-      } else if (e.code == 'invalid-email') {
-        throw '無效的信箱';
-      } else {
-        throw e.code;
-      }
+       throw AuthErrorTranslator.tw(e);
     }
   }
 
