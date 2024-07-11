@@ -1,25 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:go_router/go_router.dart';
-import 'package:house/auth/widgets/email_register_form.dart';
+import 'package:house/auth/usecases/auth_usecases/auth_usecases.dart';
+import 'package:house/auth/usecases/loacl_auth_usecases/local_auth_usecases.dart';
+import 'package:house/auth/widgets/sigin_up_page.dart';
 import 'package:house/auth/widgets/email_verify_page.dart';
 import 'package:house/auth/widgets/forget_password_page.dart';
-import 'package:house/auth/widgets/sms_login_form.dart';
-import 'usecases/auth_usecases.dart';
-import 'widgets/sign_in_form.dart';
+import 'package:house/auth/widgets/sms_sign_in_form.dart';
 
-/// - [登录流程](file://./diagrams/login_form_flow.wsd)
-/// - [注册流程 - 第一步](file://./diagrams/register_1_phone_flow.wsd)
-/// - [注册流程 - 第二步](file://./diagrams/register_2_password_flow.wsd)
+import 'widgets/sign_in_page.dart';
 
 class AuthRepo {
-  final AuthUsecases authUsecases;
+  AuthRepo({
+    required this.authUsecases,
+    required this.localAuthUsecases,
+  });
 
-  AuthRepo({required this.authUsecases});
+  final AuthUsecases authUsecases;
+  final LocalAuthUsecases localAuthUsecases;
 
   ///[UI]
-  Widget buildLoginForm(BuildContext context) => SignInForm(
+  Widget buildLoginForm(BuildContext context) => SignInPage(
         authRepo: this,
         init: () {},
       );
@@ -28,8 +29,7 @@ class AuthRepo {
         authUsecases: authUsecases,
       );
 
-  Widget buildEmailRegisterForm() =>
-      EmailRegisterForm(authUsecases: authUsecases);
+  Widget buildEmailRegisterForm() => SignUpPage(authUsecases: authUsecases);
 
   Widget buildEmailVerifyPage() => const EmailVerifyPage();
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:house/auth/helper/custom_style.dart';
 
 class EmailVerifyPage extends StatefulWidget {
   const EmailVerifyPage({super.key});
@@ -9,8 +10,6 @@ class EmailVerifyPage extends StatefulWidget {
 }
 
 class _EmailVerifyPageState extends State<EmailVerifyPage> {
- 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,10 +22,9 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
           const Center(
             child: Text('信箱驗證中，請至信箱確認'),
           ),
-         
-          ElevatedButton(
+          Custom.mediumButton(
               onPressed: () {
-                context.go('/login');
+                context.go('/sign_in');
               },
               child: const Text('回登入頁面'))
         ],

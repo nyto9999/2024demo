@@ -4,12 +4,23 @@ import 'package:go_router/go_router.dart';
 import 'package:house/auth/auth_repo.dart';
 import 'package:house/home/home.dart';
 
+// [GoRouter] Full paths for routes:
+//            ├─/login
+//            │ └─/login/sms
+//            ├─/register
+//            │ └─/register/email_verify
+//            ├─/forget_password
+//            └─ (ShellRoute)
+//              ├─/
+//              ├─/b
+//              └─/c
+// [GoRouter] setting initial location /
 final GoRouter router = GoRouter(
   initialLocation: '/',
   debugLogDiagnostics: true,
   routes: <RouteBase>[
     GoRoute(
-        path: '/login',
+        path: '/sign_in',
         pageBuilder: (context, state) => NoTransitionPage(
               key: state.pageKey,
               child: RepositoryProvider.of<AuthRepo>(context)
@@ -28,7 +39,17 @@ final GoRouter router = GoRouter(
           ),
         ]),
     GoRoute(
-        path: '/register',
+      path: '/forget_password',
+      pageBuilder: (context, state) {
+        return NoTransitionPage(
+          key: state.pageKey,
+          child: RepositoryProvider.of<AuthRepo>(context)
+              .buildForgetPasswordPage(),
+        );
+      },
+    ),
+    GoRoute(
+        path: '/sign_up',
         pageBuilder: (context, state) {
           return NoTransitionPage(
             key: state.pageKey,
@@ -45,17 +66,6 @@ final GoRouter router = GoRouter(
                 key: state.pageKey,
                 child: RepositoryProvider.of<AuthRepo>(context)
                     .buildEmailVerifyPage(),
-              );
-            },
-          ),
-
-          GoRoute(
-            path: 'forget_password',
-            pageBuilder: (context, state) {
-              return NoTransitionPage(
-                key: state.pageKey,
-                child: RepositoryProvider.of<AuthRepo>(context)
-                    .buildForgetPasswordPage(),
               );
             },
           ),
@@ -92,22 +102,25 @@ final GoRouter router = GoRouter(
   ],
   redirect: (context, state) async {
     final authRepo = RepositoryProvider.of<AuthRepo>(context);
-    final user = authRepo.authUsecases.currentUser;
-    final goingToLogin = state.uri.path.startsWith('/login') ||
-        state.uri.path.startsWith('/register');
+    final user = authRepo.authUsecases.firebaseAuth.currentUser;
+    final inThesePages = state.uri.path.startsWith('/sign_in') ||
+        state.uri.path.startsWith('/sign_up') ||
+        state.uri.path.startsWith('/forget_password');
 
     // 如果用户未登录并且不是在访问登录或注册页面，则重定向到登录页面
-    if (user == null && !goingToLogin) {
-      return '/login';
+    if (user == null && !inThesePages) {
+      return '/sign_in';
     }
 
     // 如果用户通过电子邮件和密码登录但未验证电子邮件，则显示消息并重定向到登录页面
-    if (user != null && !state.uri.path.contains('email_verify')) {
+    if (user != null && (!state.uri.path.contains('email_verify'))) {
       final isPasswordProvider = user.providerData
           .any((userInfo) => userInfo.providerId == 'password');
       if (isPasswordProvider && !user.emailVerified) {
-        await authRepo.authUsecases.signOut();
-        return '/login';
+        await authRepo.authUsecases.firebaseAuth.signOut();
+        return '/sign_in';
+      } else {
+        return null;
       }
     }
 

@@ -30,6 +30,17 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+.packages
+flutter_export_environment.sh
+flutter_export_environment.json
+
+# Firebase related files
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+release-key.jks
+web/index.html
+firebase.json
+
 
 # Symbolication related
 app.*.symbols
@@ -41,3 +52,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+# Other sensitive files
+*.key
+*.keystore
+*.jks

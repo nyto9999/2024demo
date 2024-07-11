@@ -1,4 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
+Future<T> handleAuthErrors<T>(Future<T> Function() action) async {
+  try {
+    return await action();
+  } on FirebaseAuthException catch (e) {
+    throw AuthErrorTranslator.tw(e);
+  } catch (e) {
+    throw Exception('Unexpected error: $e');
+  }
+}
 
 class AuthErrorTranslator {
   static String tw(FirebaseAuthException e) {
@@ -35,7 +44,7 @@ class AuthErrorTranslator {
         return '提供的繼續網址無效';
       case 'unauthorized-continue-uri':
         return '繼續網址的域名未列入白名單。請在 Firebase 控制台中將域名列入白名單。';
-
+ 
       default:
         return e.code;
     }

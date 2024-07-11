@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:house/auth/auth_repo.dart';
 
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
 
@@ -19,7 +20,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('build home');
+    debugPrint('build home');
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -32,17 +34,16 @@ class _HomePageState extends State<HomePage> {
                   final usecase =
                       RepositoryProvider.of<AuthRepo>(context).authUsecases;
 
-                  print(usecase.currentUser);
+                  debugPrint('${usecase.firebaseAuth.currentUser}');
                 },
                 child: const Text('user')),
           ),
-        
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          RepositoryProvider.of<AuthRepo>(context).authUsecases.signOut();
-          context.pushReplacement('/login');
+          RepositoryProvider.of<AuthRepo>(context).authUsecases.firebaseAuth.signOut();
+          context.pushReplacement('/sign_in');
         },
       ),
     );
