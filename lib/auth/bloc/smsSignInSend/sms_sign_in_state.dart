@@ -14,7 +14,10 @@ final class SmsSignInFailure extends SmsSignInState {
   SmsSignInFailure(this.error);
 }
 
-final class SmsSignInCodeSent extends SmsSignInState {}
+final class SmsSignInCodeSent extends SmsSignInState {
+  final dynamic result;
+  SmsSignInCodeSent(this.result);
+}
 final class SmsSignInConfirmationSent extends SmsSignInState {}
 
 final class InvalidSmsSignInForm extends SmsSignInState {}

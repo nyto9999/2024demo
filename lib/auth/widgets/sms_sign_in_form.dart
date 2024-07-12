@@ -1,11 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:go_router/go_router.dart';
-import 'package:house/auth/bloc/SmsSignIn/sms_sign_in_cubit.dart';
+import 'package:house/auth/bloc/smsSignInSend/sms_sign_in_cubit.dart';
 import 'package:house/auth/helper/auth_validator.dart';
 import 'package:house/auth/helper/custom_style.dart';
+import 'package:house/auth/widgets/sms_confirm_form.dart';
 import '../usecases/auth_usecases/auth_usecases.dart';
 
 class SmsSignInForm extends StatefulWidget {
@@ -23,31 +22,28 @@ class SmsSignInForm extends StatefulWidget {
 class _SmsSignInFormState extends State<SmsSignInForm> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
-  final _smsCodeController = TextEditingController();
+ 
   final ValueNotifier<Widget> _smsCodeTextField = ValueNotifier(Container());
+  @override
+  void dispose() {
+    _phoneController.dispose();
+    _smsCodeTextField.dispose();
+    super.dispose();
+  }
 
-  Widget _goHomeOrSendSmsCodeButton() {
+  Widget _sendOrConfirmSmsCode() {
     return BlocProvider(
       create: (context) => SmsSignInCubit(widget.authUsecases),
       child: BlocConsumer<SmsSignInCubit, SmsSignInState>(
         listener: (context, state) {
           switch (state) {
             case SmsSignInCodeSent():
-              _smsCodeTextField.value = TextFormField(
-                controller: _smsCodeController,
-                decoration: const InputDecoration(
-                  hintText: '請輸入驗證碼',
-                  labelText: '手機驗證碼(${kIsWeb ? 'WEB' : 'NATIVE'})',
-                ),
-              );
+              _goSmsConfirmPage(context, state);
+
             case SmsSignInConfirmationSent():
               EasyLoading.show(status: '驗證中...');
-
-            case SmsSignInSuccess():
-              EasyLoading.dismiss();
-              context.go('/');
-
             case SmsSignInFailure():
+              EasyLoading.dismiss();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(state.error),
               ));
@@ -58,8 +54,6 @@ class _SmsSignInFormState extends State<SmsSignInForm> {
           return Custom.mediumButton(
               onPressed: () {
                 context.read<SmsSignInCubit>().sendSmsSignInCode(
-                      sent: _smsCodeTextField.value is TextFormField,
-                      smsCode: _smsCodeController.text,
                       formKey: _formKey,
                       phoneNo: _phoneController.text,
                     );
@@ -67,11 +61,24 @@ class _SmsSignInFormState extends State<SmsSignInForm> {
               child: ValueListenableBuilder<Widget>(
                 valueListenable: _smsCodeTextField,
                 builder: (context, value, child) {
-                  return Text(value is TextFormField ? '確認' : '發送手機驗證碼');
+                  return const Text('發送手機驗證碼');
                 },
               ));
         },
       ),
+    );
+  }
+
+  Future<dynamic> _goSmsConfirmPage(
+      BuildContext context, SmsSignInCodeSent state) {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => SmsConfirmPage(
+                confirmationResultOrVerificationId: state.result,
+                authUsecases: widget.authUsecases,
+                phoneNo: _phoneController.text,
+              )),
     );
   }
 
@@ -83,7 +90,10 @@ class _SmsSignInFormState extends State<SmsSignInForm> {
 
   TextFormField _phoneTextfield() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: '手機號碼'),
+      decoration: const InputDecoration(
+        labelText: '手機號碼',
+        border: OutlineInputBorder(),
+      ),
       controller: _phoneController,
       validator: (value) => AuthValidator.phoneNo(value),
     );
@@ -104,7 +114,7 @@ class _SmsSignInFormState extends State<SmsSignInForm> {
               _phoneTextfield(),
               const SizedBox(height: 20),
               _shouldDisplaySmsTextfield(),
-              _goHomeOrSendSmsCodeButton(),
+              _sendOrConfirmSmsCode(),
             ],
           ),
         ),

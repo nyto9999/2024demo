@@ -24,6 +24,14 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
 
+  @override
+  void dispose() {
+    _confirmPasswordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   Widget _registerButton() {
     return BlocProvider(
       create: (context) => EmailSignUpCubit(widget.authUsecases),

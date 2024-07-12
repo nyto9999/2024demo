@@ -5,11 +5,12 @@ import 'package:house/auth/auth_repo.dart';
 import 'package:house/home/home.dart';
 
 // [GoRouter] Full paths for routes:
-//            ├─/login
-//            │ └─/login/sms
-//            ├─/register
-//            │ └─/register/email_verify
+//            ├─/sign_in
+//            │ └─/sign_in/sms
+//            │   └─/(push) sms confirm page
 //            ├─/forget_password
+//            ├─/sign_up
+//            │ └─/sign_up/email_verify
 //            └─ (ShellRoute)
 //              ├─/
 //              ├─/b

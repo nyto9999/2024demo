@@ -20,6 +20,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   String message = '';
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
   TextFormField _emailTextfield() {
     return TextFormField(
       decoration: const InputDecoration(

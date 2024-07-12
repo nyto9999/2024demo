@@ -77,6 +77,7 @@ class WebAuthUsecases implements AuthUsecases {
     String? verificationId,
     ConfirmationResult? confirmationResult,
   }) async {
+  
     return await handleAuthErrors(() async {
       await confirmationResult?.confirm(smsCode);
     });

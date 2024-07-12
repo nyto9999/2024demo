@@ -1,6 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+ // ignore: depend_on_referenced_packages
+ import 'package:local_auth_darwin/local_auth_darwin.dart';
+ 
+ 
 
 class LocalAuthUsecases {
   final LocalAuthentication localAuth;
@@ -42,12 +46,18 @@ class LocalAuthUsecases {
   }
 
   Future<bool> authenticate() async {
-    assert(!isAvailable, '不支援生物識別');
+    if (!isAvailable) throw '不支援生物識別';
 
     try {
       return await localAuth.authenticate(
+        authMessages: const [
+
+          IOSAuthMessages(
+            cancelButton: '取消',
+          )
+        ],
         localizedReason: '請進行生物識別認證',
-        options: const AuthenticationOptions(stickyAuth: true),
+        options: const AuthenticationOptions(stickyAuth: true, useErrorDialogs: true),
       );
     } on PlatformException catch (e) {
       debugPrint('認證錯誤: $e');
@@ -56,6 +66,6 @@ class LocalAuthUsecases {
   }
 
   Future<void> stopAuthentication() async {
-      localAuth.stopAuthentication();
+    localAuth.stopAuthentication();
   }
 }

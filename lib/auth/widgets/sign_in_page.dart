@@ -25,9 +25,9 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   String? _errorMessage;
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -35,6 +35,13 @@ class _SignInPageState extends State<SignInPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.init();
     });
+  }
+
+  @override
+  dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   Widget _bioSignInButton() {
@@ -86,7 +93,9 @@ class _SignInPageState extends State<SignInPage> {
       ),
       Buttons.facebook,
       text: 'Facebook',
-      onPressed: () async {},
+      onPressed: () async {
+        await widget.authRepo.authUsecases.signInWithFacebook();
+      },
     );
   }
 
