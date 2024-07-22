@@ -15,5 +15,10 @@ linter:
     unnecessary_null_checks: false
     prefer_single_quotes: true   
 
+
+analyzer:
+ enable-experiment:
+   - macros
+
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

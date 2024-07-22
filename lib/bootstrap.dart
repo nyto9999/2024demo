@@ -25,6 +25,8 @@ bootstrap() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
+  
 }
 
 void configLoading() {

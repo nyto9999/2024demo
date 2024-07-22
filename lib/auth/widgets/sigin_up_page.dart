@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:house/auth/bloc/emailSignUp/email_sign_up_cubit.dart';
+import 'package:house/auth/bloc/email_sign_up/email_sign_up_cubit.dart';
 import 'package:house/auth/helper/auth_validator.dart';
 import 'package:house/auth/helper/custom_style.dart';
-import 'package:house/auth/usecases/auth_usecases/auth_usecases.dart';
+import 'package:house/auth/methods/auth/auth_platform.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({
     super.key,
-    required this.authUsecases,
+    required this.auth,
   });
 
-  final AuthUsecases authUsecases;
+  final AuthPlatform auth;
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -34,7 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _registerButton() {
     return BlocProvider(
-      create: (context) => EmailSignUpCubit(widget.authUsecases),
+      create: (context) => EmailSignUpCubit(widget.auth),
       child: BlocConsumer<EmailSignUpCubit, EmailSignUpState>(
         listener: (context, state) {
           switch (state) {

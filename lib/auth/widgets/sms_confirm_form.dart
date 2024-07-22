@@ -3,20 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:house/auth/bloc/smsSignInConfirm/sms_sign_in_confirm_cubit.dart';
+import 'package:house/auth/auth_repo.dart';
+import 'package:house/auth/bloc/sms_sign_in_confirm/sms_sign_in_confirm_cubit.dart';
 import 'package:house/auth/helper/custom_style.dart';
-import 'package:house/auth/usecases/auth_usecases/auth_usecases.dart';
 import 'package:pinput/pinput.dart';
 
 class SmsConfirmPage extends StatefulWidget {
   const SmsConfirmPage({
     super.key,
     this.confirmationResultOrVerificationId,
-    required this.authUsecases,
     required this.phoneNo,
   });
 
-  final AuthUsecases authUsecases;
   final dynamic confirmationResultOrVerificationId;
   final String phoneNo;
 
@@ -40,7 +38,7 @@ class _SmsConfirmPageState extends State<SmsConfirmPage> {
 
   BlocProvider<SmsSignInConfirmCubit> _smsTextfield(PinTheme defaultPinTheme) {
     return BlocProvider(
-      create: (_) => SmsSignInConfirmCubit(widget.authUsecases),
+      create: (_) => SmsSignInConfirmCubit(context.read<AuthRepo>()),
       child: BlocConsumer<SmsSignInConfirmCubit, SmsSignInConfirmState>(
         listener: (context, state) {
           switch (state) {

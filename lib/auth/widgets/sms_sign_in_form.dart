@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:house/auth/bloc/smsSignInSend/sms_sign_in_cubit.dart';
+import 'package:house/auth/bloc/sms_sign_in/sms_sign_in_cubit.dart';
 import 'package:house/auth/helper/auth_validator.dart';
 import 'package:house/auth/helper/custom_style.dart';
+import 'package:house/auth/methods/auth/auth_platform.dart';
 import 'package:house/auth/widgets/sms_confirm_form.dart';
-import '../usecases/auth_usecases/auth_usecases.dart';
 
 class SmsSignInForm extends StatefulWidget {
   const SmsSignInForm({
     super.key,
-    required this.authUsecases,
+    required this.auth,
   });
 
-  final AuthUsecases authUsecases;
+  final AuthPlatform auth;
 
   @override
   State<SmsSignInForm> createState() => _SmsSignInFormState();
@@ -22,7 +22,7 @@ class SmsSignInForm extends StatefulWidget {
 class _SmsSignInFormState extends State<SmsSignInForm> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
- 
+
   final ValueNotifier<Widget> _smsCodeTextField = ValueNotifier(Container());
   @override
   void dispose() {
@@ -33,7 +33,7 @@ class _SmsSignInFormState extends State<SmsSignInForm> {
 
   Widget _sendOrConfirmSmsCode() {
     return BlocProvider(
-      create: (context) => SmsSignInCubit(widget.authUsecases),
+      create: (context) => SmsSignInCubit(widget.auth),
       child: BlocConsumer<SmsSignInCubit, SmsSignInState>(
         listener: (context, state) {
           switch (state) {
@@ -76,7 +76,6 @@ class _SmsSignInFormState extends State<SmsSignInForm> {
       MaterialPageRoute(
           builder: (context) => SmsConfirmPage(
                 confirmationResultOrVerificationId: state.result,
-                authUsecases: widget.authUsecases,
                 phoneNo: _phoneController.text,
               )),
     );

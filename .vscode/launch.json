@@ -7,19 +7,28 @@
         {
             "name": "house",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "toolArgs": [
+                "--enable-experiment=macros",
+            ],
         },
         {
             "name": "house (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "toolArgs": [
+                "--enable-experiment=macros",
+            ],
         },
         {
             "name": "house (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "toolArgs": [
+                "--enable-experiment=macros",
+            ],
         }
     ]
 }

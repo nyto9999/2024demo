@@ -1,30 +1,60 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:house/auth/auth_repo.dart';
-import 'package:house/auth/usecases/auth_usecases/auth_platform_factory.dart';
-import 'package:house/auth/usecases/loacl_auth_usecases/local_auth_usecases.dart';
+import 'package:house/auth/bloc/user_role/user_role_state.dart';
+import 'package:house/auth/methods/auth/auth_platform_factory.dart';
+import 'package:house/auth/methods/loacl_auth/local_auth_methods.dart';
 import 'package:house/bootstrap.dart';
-import 'package:house/router.dart';
+import 'package:house/firestore/firestore_repo.dart';
+import 'package:house/post/methods/customer_post_methods.dart';
+import 'package:house/post/methods/master_post_methods.dart';
+import 'package:house/post/post_repo.dart';
+
+import 'package:house/router/router.dart';
+
 import 'package:local_auth/local_auth.dart';
+
+final auth = FirebaseAuth.instance;
+final firestore = FirebaseFirestore.instance;
+final firestoreRepo = FireStoreRepo();
 
 Future<void> main() async {
   await bootstrap();
 
   runApp(
-    RepositoryProvider(
-      lazy: false,
-      create: (context) => AuthRepo(
-        authUsecases: AuthUsecaseFactory.get(
-          FirebaseAuth.instance,
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(
+          lazy: false,
+          create: (context) => AuthRepo(
+            authMethods: AuthPlatformFactory.get(),
+          ),
         ),
-        localAuthUsecases: LocalAuthUsecases(
-          localAuth: LocalAuthentication(),
+        RepositoryProvider(
+          create: (_) => PostRepo(
+            customer: PostCustomerMethods(),
+            master: PostMasterMethods(),
+          ),
         ),
+        RepositoryProvider(
+          lazy: false,
+          create: (context) =>
+              LocalAuthMethods(localAuth: LocalAuthentication()),
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            lazy: false,
+            create: (context) => UserRoleCubit(context.read<AuthRepo>()),
+          ),
+        ],
+        child: const App(),
       ),
-      child: const App(),
     ),
   );
 }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:house/auth/bloc/forgetPassword/forget_password_cubit.dart';
+import 'package:house/auth/bloc/forget_password/forget_password_cubit.dart';
 import 'package:house/auth/helper/auth_validator.dart';
 import 'package:house/auth/helper/custom_style.dart';
-import 'package:house/auth/usecases/auth_usecases/auth_usecases.dart';
+import 'package:house/auth/methods/auth/auth_platform.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
-  const ForgetPasswordPage({super.key, required this.authUsecases});
+  const ForgetPasswordPage({super.key, required this.auth});
 
-  final AuthUsecases authUsecases;
+  final AuthPlatform auth;
 
   @override
   State<ForgetPasswordPage> createState() => _ForgetPasswordPageState();
@@ -50,7 +50,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   Widget _sendVerifyEmailButton(
       BuildContext context, ValueNotifier<bool> sendEmail) {
     return BlocProvider(
-      create: (context) => ForgetPasswordCubit(widget.authUsecases),
+      create: (context) => ForgetPasswordCubit(widget.auth),
       child: BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
         listener: (context, state) {
           switch (state) {
@@ -70,7 +70,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 return state is ForgetPasswordLoading
                     ? Custom.spinner(context)
                     : Text(
-                        value ? '重新發送驗證郵件' : '發送驗證郵件',
+                        value ? '重新發送' : '發送驗證郵件',
                       );
               },
             ),

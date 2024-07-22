@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:house/auth/auth_repo.dart';
-import 'package:house/auth/bloc/emailSignIn/email_sign_in_cubit.dart';
-import 'package:house/auth/bloc/googleSignIn/google_sign_in_cubit.dart';
+import 'package:house/auth/bloc/email_sign_in/email_sign_in_cubit.dart';
+import 'package:house/auth/bloc/google_sign_in/google_sign_in_cubit.dart';
 import 'package:house/auth/helper/auth_validator.dart';
 import 'package:house/auth/helper/custom_style.dart';
+import 'package:house/auth/methods/loacl_auth/local_auth_methods.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 class SignInPage extends StatefulWidget {
@@ -45,7 +46,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget _bioSignInButton() {
-    return widget.authRepo.localAuthUsecases.isAvailable
+    return context.read<LocalAuthMethods>().isAvailable
         ? SignInButtonBuilder(
             backgroundColor: Colors.green,
             onPressed: () async {},
@@ -55,11 +56,12 @@ class _SignInPageState extends State<SignInPage> {
 
   Widget _googleSignInButton() {
     return BlocProvider(
-      create: (context) => GoogleSignInCubit(widget.authRepo.authUsecases),
+      create: (context) => GoogleSignInCubit(widget.authRepo.authMethods),
       child: BlocConsumer<GoogleSignInCubit, GoogleSignInState>(
         listener: (context, state) {
           switch (state) {
             case GoogleSignInSuccess():
+            
               context.go('/');
             case GoogleSignInFailure():
               setState(() => _errorMessage = state.error);
@@ -94,7 +96,7 @@ class _SignInPageState extends State<SignInPage> {
       Buttons.facebook,
       text: 'Facebook',
       onPressed: () async {
-        await widget.authRepo.authUsecases.signInWithFacebook();
+        await widget.authRepo.authMethods.signInWithFacebook();
       },
     );
   }
@@ -156,7 +158,7 @@ class _SignInPageState extends State<SignInPage> {
 
   Widget _emailSignInButton(BuildContext context) {
     return BlocProvider(
-      create: (context) => EmailSignInCubit(widget.authRepo.authUsecases),
+      create: (context) => EmailSignInCubit(widget.authRepo.authMethods),
       child: BlocConsumer<EmailSignInCubit, EmailSignInState>(
         listener: (context, state) {
           switch (state) {
@@ -224,6 +226,7 @@ class _SignInPageState extends State<SignInPage> {
                   _emailSignInButton(context),
                 ],
               ),
+              Custom.gap,
               Custom.gap,
               Custom.divider('會員'),
               _emailSignUpButton(context),
