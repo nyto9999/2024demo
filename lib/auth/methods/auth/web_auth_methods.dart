@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:house/auth/helper/firebase_auth_error_translator.dart';
+import 'package:house/helper/firebase_auth_error_translator.dart';
 import 'package:house/auth/methods/auth/auth_platform.dart';
 import 'package:house/auth/methods/auth/auth_shared_methods.dart';
 import 'package:house/main.dart';

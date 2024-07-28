@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:house/auth/bloc/forget_password/forget_password_cubit.dart';
-import 'package:house/auth/helper/auth_validator.dart';
-import 'package:house/auth/helper/custom_style.dart';
+import 'package:house/helper/auth_validator.dart';
+import 'package:house/helper/custom_style.dart';
 import 'package:house/auth/methods/auth/auth_platform.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
@@ -33,7 +33,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         border: OutlineInputBorder(),
       ),
       controller: _emailController,
-      validator: (value) => AuthValidator.email(value),
+      validator: (value) => Validator.email(value),
     );
   }
 

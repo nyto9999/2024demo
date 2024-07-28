@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:house/auth/bloc/email_sign_up/email_sign_up_cubit.dart';
-import 'package:house/auth/helper/auth_validator.dart';
-import 'package:house/auth/helper/custom_style.dart';
+import 'package:house/helper/auth_validator.dart';
+import 'package:house/helper/custom_style.dart';
 import 'package:house/auth/methods/auth/auth_platform.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -82,7 +82,7 @@ class _SignUpPageState extends State<SignUpPage> {
       controller: _confirmPasswordController,
       obscureText: true,
       validator: (value) =>
-          AuthValidator.confirmPassword(_passwordController.text, value),
+          Validator.confirmPassword(_passwordController.text, value),
     );
   }
 
@@ -95,7 +95,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       controller: _passwordController,
       obscureText: true,
-      validator: (value) => AuthValidator.password(value),
+      validator: (value) => Validator.password(value),
     );
   }
 
@@ -107,7 +107,7 @@ class _SignUpPageState extends State<SignUpPage> {
         border: OutlineInputBorder(),
       ),
       controller: _emailController,
-      validator: (value) => AuthValidator.email(value),
+      validator: (value) => Validator.email(value),
     );
   }
 

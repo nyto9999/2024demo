@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:house/app_bloc_observer.dart';
+
 import 'package:house/firebase_options.dart';
 
 bootstrap() async {
@@ -25,8 +26,6 @@ bootstrap() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-
-  
 }
 
 void configLoading() {

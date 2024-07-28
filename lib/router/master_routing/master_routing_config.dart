@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:house/const.dart';
+import 'package:house/helper/const.dart';
 import 'package:house/helper.dart';
 import 'package:house/home/master_home.dart';
 import 'package:house/main.dart';
 import 'package:house/notification/master/master_notification.dart';
-import 'package:house/post/pages/master_page/master_application_page.dart';
-import 'package:house/post/pages/shared_page/post_detail_page.dart';
-import 'package:house/post/post_repo.dart';
+import 'package:house/tx/pages/master_page/master_application_page.dart';
+import 'package:house/tx/pages/master_page/master_my_txs_page/master_my_txs_page.dart';
+import 'package:house/tx/pages/master_page/master_tx_ops_page.dart';
 import 'package:house/router/initial_routing/initial_routing_config.dart';
 import 'package:house/router/master_routing/master_bottom_navigation_page.dart';
 import 'package:house/router/router.dart';
 import 'package:house/setting/setting_page.dart';
 
 final _masterHomeNavigatorKey = GlobalKey<NavigatorState>();
-final _myOrdersNavigatorKey = GlobalKey<NavigatorState>();
+final _myTxNavigatorKey = GlobalKey<NavigatorState>();
 final _masterNotificationNavigatorKey = GlobalKey<NavigatorState>();
 final _settingNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -37,11 +36,12 @@ RoutingConfig masterRoutingConfig() {
                 },
                 routes: [
                   GoRoute(
-                    path: 'post',
+                    path: Const.m_tx_ops,
                     pageBuilder: (context, state) {
                       return NoTransitionPage(
-                        child: PostDetailPage(
-                            postId: state.uri.queryParameters['id']!),
+                        child: MasterTxOpsPage(
+                          txId: state.uri.queryParameters['id']!,
+                        ),
                       );
                     },
                   ),
@@ -49,12 +49,11 @@ RoutingConfig masterRoutingConfig() {
               ),
             ],
           ),
-          StatefulShellBranch(navigatorKey: _myOrdersNavigatorKey, routes: [
+          StatefulShellBranch(navigatorKey: _myTxNavigatorKey, routes: [
             GoRoute(
-              path: '/my_orders',
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: RepositoryProvider.of<PostRepo>(context)
-                    .buildMasterMyOrdersPage(),
+              path: '/${Const.my_tx}',
+              pageBuilder: (context, state) => const NoTransitionPage(
+                child: MasterMyTxsPage(),
               ),
             ),
           ]),

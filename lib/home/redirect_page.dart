@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:house/auth/helper/custom_style.dart';
+import 'package:house/firestore/exception/exist_exception.dart';
+import 'package:house/helper/custom_style.dart';
 import 'package:house/router/router.dart';
 
 class RedirectPage extends StatefulWidget {
@@ -16,7 +17,7 @@ class _RedirectPageState extends State<RedirectPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       try {
         await routerConfigNotifier.updateRoleAndConfig();
-      } on UserNotFound catch (e) {
+      } on UnauthorizedException catch (e) {
         debugPrint('UserException: ${e.message}');
         // 如果出现错误，则注销用户并重定向到登录页面
         WidgetsBinding.instance.addPostFrameCallback((_) {

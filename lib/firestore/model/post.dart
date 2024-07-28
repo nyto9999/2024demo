@@ -10,6 +10,8 @@ class Post {
   final String? owner;
   final String? kind;
   final String? status;
+  final String? address;
+  final DateTime? date;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -22,11 +24,13 @@ class Post {
     this.owner,
     this.kind,
     this.status,
+    this.address,
+    this.date,
     this.createdAt,
     this.updatedAt,
   });
 
-  Map<String, dynamic> toMap(MapType mapType) {
+  Map<String, dynamic> toMap(ServerTimeStamp mapType) {
     return <String, dynamic>{
       'id': id,
       'name': name,
@@ -34,6 +38,8 @@ class Post {
       'owner': owner,
       'kind': kind,
       'status': status,
+      'address': address,
+      'date': dateToTimestamp(date),
       'createdAt': dateToTimestamp(createdAt) ?? FieldValue.serverTimestamp(),
       'updatedAt': dateToTimestamp(updatedAt) ?? FieldValue.serverTimestamp(),
     };
@@ -46,6 +52,8 @@ class Post {
     String? owner,
     String? kind,
     String? status,
+    String? address, // 新增的字段
+    DateTime? date, // 新增的字段
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -56,12 +64,17 @@ class Post {
       owner: owner ?? this.owner,
       kind: kind ?? this.kind,
       status: status ?? this.status,
+      address: address ?? this.address, // 新增的字段
+      date: date ?? this.date, // 新增的字段
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
-  factory Post.fromMap(Map<String, dynamic> map) {
+  factory Post.fromMap(Map<String, dynamic>? map) {
+    if (map == null) {
+      return Post.empty();
+    }
     return Post(
       id: map['id'] != null ? map['id'] as String : null,
       name: map['name'] != null ? map['name'] as String : null,
@@ -69,12 +82,15 @@ class Post {
       owner: map['owner'] != null ? map['owner'] as String : null,
       kind: map['kind'] != null ? map['kind'] as String : null,
       status: map['status'] != null ? map['status'] as String : null,
+      address:
+          map['address'] != null ? map['address'] as String : null, // 新增的字段
+      date: timestampToDate(map, 'date'), // 新增的字段
       createdAt: timestampToDate(map, 'createdAt'),
       updatedAt: timestampToDate(map, 'updatedAt'),
     );
   }
 
-  String toJson(MapType type) => json.encode(toMap(type));
+  String toJson(ServerTimeStamp type) => json.encode(toMap(type));
 
   factory Post.fromJson(String source) =>
       Post.fromMap(json.decode(source) as Map<String, dynamic>);

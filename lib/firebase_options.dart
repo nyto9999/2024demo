@@ -52,7 +52,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '548071695548',
     projectId: 'house-ff670',
     authDomain: 'house-ff670.firebaseapp.com',
-    databaseURL: 'https://house-ff670-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://house-ff670-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'house-ff670.appspot.com',
     measurementId: 'G-6K14FM7SHP',
   );
@@ -62,7 +63,8 @@ class DefaultFirebaseOptions {
     appId: '1:548071695548:android:61107541c193d62a1e9cb9',
     messagingSenderId: '548071695548',
     projectId: 'house-ff670',
-    databaseURL: 'https://house-ff670-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://house-ff670-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'house-ff670.appspot.com',
   );
 
@@ -71,9 +73,13 @@ class DefaultFirebaseOptions {
     appId: '1:548071695548:ios:d0e42b577a90440d1e9cb9',
     messagingSenderId: '548071695548',
     projectId: 'house-ff670',
-    databaseURL: 'https://house-ff670-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://house-ff670-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'house-ff670.appspot.com',
+    androidClientId:
+        '548071695548-f5tm8d43utdq9t7pvjjv7q66me2ufnbe.apps.googleusercontent.com',
+    iosClientId:
+        '548071695548-c5pbpdr4gtqjcvcm2tmhif4iiv19l3vn.apps.googleusercontent.com',
     iosBundleId: 'com.example.house',
   );
-
 }

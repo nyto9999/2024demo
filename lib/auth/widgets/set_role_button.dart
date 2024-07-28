@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:house/auth/bloc/set_role/set_role_cubit.dart';
-import 'package:house/auth/helper/custom_style.dart';
+import 'package:house/helper/custom_style.dart';
 
 class SetRoleButton extends StatelessWidget {
   final String role;

@@ -3,20 +3,31 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 
-exports.loginByPhone = functions.region('asia-east1').https.onCall(async (data, context) => {
-  const phoneNumber = data.phoneNumber;
-  let userRecord;
+exports.sendQuoteNotification = functions
+    .region('asia-east1') // 将区域设置为亚洲
+    .firestore
+    .document('transactions/{transactionId}/quotes/{quoteId}')
+    .onWrite(async (change, context) => {
+      const quoteData = change.after.data();
+      const customerId = quoteData.customerId;
 
-  try {
-    // 根據電話號碼獲取用戶，處理台灣區號
-    const formattedPhoneNumber = phoneNumber.startsWith('0') ? '+886' + phoneNumber.substring(1) : phoneNumber;
-    userRecord = await admin.auth().getUserByPhoneNumber(formattedPhoneNumber);
+      // 获取客户的 FCM Token
+      const userDoc = await admin.firestore().collection('userRoles').doc(customerId).get();
+      const fcmToken = userDoc.data().fcmToken;
 
-    // 創建自定義令牌
-    const customToken = await admin.auth().createCustomToken(userRecord.uid);
-    return {token: customToken};
-  } catch (error) {
-    console.error('Error creating custom token:', error);
-    throw new functions.https.HttpsError('internal', error.message);
-  }
-});
+      const payload = {
+        notification: {
+          title: '新报价通知',
+          body: '您的报价已更新',
+        },
+        token: fcmToken, // 确保包含 token 字段
+      };
+
+      // 发送通知
+      try {
+        await admin.messaging().send(payload);
+        console.log('通知发送成功');
+      } catch (error) {
+        console.error('通知发送失败', error);
+      }
+    });

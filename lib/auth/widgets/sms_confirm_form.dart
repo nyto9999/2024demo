@@ -5,7 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:house/auth/auth_repo.dart';
 import 'package:house/auth/bloc/sms_sign_in_confirm/sms_sign_in_confirm_cubit.dart';
-import 'package:house/auth/helper/custom_style.dart';
+import 'package:house/fcm_service.dart';
+import 'package:house/helper/custom_style.dart';
 import 'package:pinput/pinput.dart';
 
 class SmsConfirmPage extends StatefulWidget {
@@ -44,6 +45,7 @@ class _SmsConfirmPageState extends State<SmsConfirmPage> {
           switch (state) {
             case SmsSignInConfirmSuccess():
               EasyLoading.dismiss();
+ 
               context.go('/');
             case SmsSignInConfirmLoading():
               EasyLoading.show(status: '驗證中...');

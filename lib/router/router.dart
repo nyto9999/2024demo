@@ -40,8 +40,3 @@ class RoleAwareRoutingConfigNotifier extends ValueNotifier<RoutingConfig> {
     }
   }
 }
-
-class UserNotFound implements Exception {
-  final String message;
-  UserNotFound(this.message);
-}

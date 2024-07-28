@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:house/auth/auth_repo.dart';
+import 'package:house/auth/bloc/user_role/user_role_cubit.dart';
 import 'package:house/auth/bloc/user_role/user_role_state.dart';
 import 'package:house/auth/widgets/set_role_button.dart';
-import 'package:house/const.dart';
+import 'package:house/helper/const.dart';
 
 import 'package:house/main.dart';
 
@@ -21,6 +22,11 @@ class SettingPage extends StatelessWidget {
       appBar: AppBar(
         title: BlocBuilder<UserRoleCubit, UserRoleState>(
           builder: (context, state) {
+            if (state.model == null) {
+              debugPrint('retry');
+              context.read<UserRoleCubit>().init();
+            }
+
             return Text('當前用戶角色 : ${state.model?.role}');
           },
         ),
@@ -36,6 +42,7 @@ class SettingPage extends StatelessWidget {
                     auth.currentUser?.updateDisplayName('陳宇亘');
                   },
                   child: const Text('reset')),
+                  //bug here 有時候不能切換
               if (userRole == 'customer' && isMaster)
                 const SetRoleButton(
                   role: 'master',

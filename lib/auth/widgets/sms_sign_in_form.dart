@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:house/auth/bloc/sms_sign_in/sms_sign_in_cubit.dart';
-import 'package:house/auth/helper/auth_validator.dart';
-import 'package:house/auth/helper/custom_style.dart';
+import 'package:house/helper/auth_validator.dart';
+import 'package:house/helper/custom_style.dart';
 import 'package:house/auth/methods/auth/auth_platform.dart';
 import 'package:house/auth/widgets/sms_confirm_form.dart';
 
@@ -94,7 +94,7 @@ class _SmsSignInFormState extends State<SmsSignInForm> {
         border: OutlineInputBorder(),
       ),
       controller: _phoneController,
-      validator: (value) => AuthValidator.phoneNo(value),
+      validator: (value) => Validator.phoneNo(value),
     );
   }
 

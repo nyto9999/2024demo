@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:house/auth/helper/custom_style.dart';
+import 'package:house/helper/custom_style.dart';
 
 class EmailVerifyPage extends StatefulWidget {
   const EmailVerifyPage({super.key});

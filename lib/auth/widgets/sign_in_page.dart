@@ -5,8 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:house/auth/auth_repo.dart';
 import 'package:house/auth/bloc/email_sign_in/email_sign_in_cubit.dart';
 import 'package:house/auth/bloc/google_sign_in/google_sign_in_cubit.dart';
-import 'package:house/auth/helper/auth_validator.dart';
-import 'package:house/auth/helper/custom_style.dart';
+import 'package:house/fcm_service.dart';
+import 'package:house/helper/auth_validator.dart';
+import 'package:house/helper/custom_style.dart';
 import 'package:house/auth/methods/loacl_auth/local_auth_methods.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
@@ -61,7 +62,7 @@ class _SignInPageState extends State<SignInPage> {
         listener: (context, state) {
           switch (state) {
             case GoogleSignInSuccess():
-            
+ 
               context.go('/');
             case GoogleSignInFailure():
               setState(() => _errorMessage = state.error);
@@ -109,7 +110,7 @@ class _SignInPageState extends State<SignInPage> {
         border: OutlineInputBorder(),
       ),
       controller: _emailController,
-      validator: AuthValidator.email,
+      validator: Validator.email,
     );
   }
 
@@ -122,7 +123,7 @@ class _SignInPageState extends State<SignInPage> {
       ),
       controller: _passwordController,
       obscureText: true,
-      validator: AuthValidator.password,
+      validator: Validator.password,
     );
   }
 
@@ -163,6 +164,7 @@ class _SignInPageState extends State<SignInPage> {
         listener: (context, state) {
           switch (state) {
             case EmailSignInSuccess():
+ 
               context.go('/');
             case EmailNotVerified():
               context.go('/sign_up/email_verify', extra: _emailController.text);

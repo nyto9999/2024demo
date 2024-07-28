@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:house/const.dart';
-import 'package:house/firestore/model/quote.dart';
+import 'package:house/helper/const.dart';
 import 'package:house/helper.dart';
 import 'package:house/home/customer_home.dart';
 import 'package:house/main.dart';
-import 'package:house/post/pages/customer_page/payment_page.dart';
-import 'package:house/post/pages/master_page/master_application_page.dart';
-import 'package:house/post/pages/shared_page/post_detail_page.dart';
-import 'package:house/post/post_repo.dart';
+import 'package:house/notification/customer/customer_notification.dart';
+import 'package:house/tx/pages/customer_page/add_tx_page.dart';
+import 'package:house/tx/pages/customer_page/customer_my_tx_page/customer_my_txs_page.dart';
+import 'package:house/tx/pages/customer_page/customer_tx_ops_page.dart';
+import 'package:house/tx/pages/master_page/master_application_page.dart';
 import 'package:house/router/customer_routing/customer_bottom_navigation_page.dart';
 import 'package:house/router/initial_routing/initial_routing_config.dart';
 import 'package:house/router/router.dart';
 import 'package:house/setting/setting_page.dart';
 
 final _customerHomeNavigatorKey = GlobalKey<NavigatorState>();
-final _myPostsNavigatorKey = GlobalKey<NavigatorState>();
+final _myTxNavigatorKey = GlobalKey<NavigatorState>();
 final _customerNotificationNavigatorKey = GlobalKey<NavigatorState>();
 final _settingNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -39,30 +38,29 @@ RoutingConfig customerRoutingConfig() {
                   },
                   routes: [
                     GoRoute(
-                        path: Const.create_post,
-                        pageBuilder: (context, state) => NoTransitionPage(
-                              child: RepositoryProvider.of<PostRepo>(context)
-                                  .buildCreatePostPage(),
+                        path: Const.c_add_tx,
+                        pageBuilder: (context, state) => const NoTransitionPage(
+                              child: CustomerAddTxPage(),
                             )),
                   ])
             ],
           ),
-          StatefulShellBranch(navigatorKey: _myPostsNavigatorKey, routes: [
+          StatefulShellBranch(navigatorKey: _myTxNavigatorKey, routes: [
             GoRoute(
-              path: '/${Const.my_posts}',
+              path: '/${Const.my_tx}',
               pageBuilder: (context, state) => NoTransitionPage(
                 key: state.pageKey,
-                child:
-                    RepositoryProvider.of<PostRepo>(context).buildMyPostsPage(),
+                child: const CustomerMyTxsPage(),
               ),
               routes: [
                 GoRoute(
-                  path: 'post',
+                  path: Const.c_tx_ops,
                   pageBuilder: (context, state) {
                     return NoTransitionPage(
                       key: state.pageKey,
-                      child: PostDetailPage(
-                          postId: state.uri.queryParameters['id']!),
+                      child: CustomerTxOpsPage(
+                        txId: state.uri.queryParameters['id']!,
+                      ),
                     );
                   },
                 ),
@@ -75,9 +73,8 @@ RoutingConfig customerRoutingConfig() {
                 GoRoute(
                   path: '/${Const.customer_notification}',
                   pageBuilder: (context, state) {
-                    return NoTransitionPage(
-                      child: RepositoryProvider.of<PostRepo>(context)
-                          .buildCustomerNotificationPage(),
+                    return const NoTransitionPage(
+                      child: CustomerNotificationPage(),
                     );
                   },
                 ),
@@ -110,16 +107,6 @@ RoutingConfig customerRoutingConfig() {
               child: navigationShell,
             ),
             state: state,
-          );
-        },
-      ),
-      GoRoute(
-        path: '/${Const.payment}',
-        pageBuilder: (context, state) {
-          final quote = QuoteModel.fromJson(state.extra as String);
-
-          return NoTransitionPage(
-            child: PaymentPage(quote: quote),
           );
         },
       ),
