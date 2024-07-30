@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:house/app_bloc_observer.dart';
+import 'package:house/fcm_service.dart';
 
 import 'package:house/firebase_options.dart';
 
@@ -12,10 +14,10 @@ bootstrap() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Bloc.observer = const AppBlocObserver();
-
   configLoading();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FcmService().initialize();
 
   // flutter framework errors
   FlutterError.onError = (errorDetails) {

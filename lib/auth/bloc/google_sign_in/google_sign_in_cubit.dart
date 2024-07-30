@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:house/auth/methods/auth/auth_platform.dart';
+import 'package:house/main.dart';
 
 part 'google_sign_in_state.dart';
 
@@ -19,6 +20,7 @@ class GoogleSignInCubit extends Cubit<GoogleSignInState> {
           emit(GoogleSignInFailure('請稍後再試'));
         } else {
 
+          analytics.logLogin(loginMethod: 'google');
           
           emit(GoogleSignInSuccess());
         }

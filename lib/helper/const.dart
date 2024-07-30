@@ -20,6 +20,9 @@ class Const {
   static const String reviews = 'reviews';
   static const String ratings = 'ratings';
 
+  //sub collection name
+  static const String messages = 'messages';
+
   //db doc field name
   static const String masterId = 'masterId';
   static const String createdAt = 'createdAt';

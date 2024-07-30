@@ -1,9 +1,5 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:house/fcm_service.dart';
-import 'package:house/helper/const.dart';
-import 'package:house/main.dart';
 
 class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({super.key, required this.title});
@@ -17,12 +13,10 @@ class CustomerHomePage extends StatefulWidget {
 class _CustomerHomePageState extends State<CustomerHomePage> {
   @override
   void initState() {
-    FcmService().initialize();
+    FcmService().getToken();
 
     super.initState();
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +38,6 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
         child: const Text('刊登'),
         onPressed: () {
           // context.go('/${Const.c_add_tx}');
-
-          FcmService().sendPushMessage();
         },
       ),
     );

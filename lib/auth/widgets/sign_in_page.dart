@@ -5,10 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:house/auth/auth_repo.dart';
 import 'package:house/auth/bloc/email_sign_in/email_sign_in_cubit.dart';
 import 'package:house/auth/bloc/google_sign_in/google_sign_in_cubit.dart';
-import 'package:house/fcm_service.dart';
 import 'package:house/helper/auth_validator.dart';
 import 'package:house/helper/custom_style.dart';
 import 'package:house/auth/methods/loacl_auth/local_auth_methods.dart';
+import 'package:house/main.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 class SignInPage extends StatefulWidget {
@@ -36,6 +36,9 @@ class _SignInPageState extends State<SignInPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.init();
+
+      analytics.logAppOpen();
+      analytics.logScreenView(screenName: '/登入畫面');
     });
   }
 
@@ -62,9 +65,9 @@ class _SignInPageState extends State<SignInPage> {
         listener: (context, state) {
           switch (state) {
             case GoogleSignInSuccess():
- 
               context.go('/');
             case GoogleSignInFailure():
+            
               setState(() => _errorMessage = state.error);
             default:
           }
@@ -164,7 +167,6 @@ class _SignInPageState extends State<SignInPage> {
         listener: (context, state) {
           switch (state) {
             case EmailSignInSuccess():
- 
               context.go('/');
             case EmailNotVerified():
               context.go('/sign_up/email_verify', extra: _emailController.text);

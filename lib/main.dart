@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
- 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -10,19 +12,31 @@ import 'package:house/auth/bloc/user_role/user_role_cubit.dart';
 import 'package:house/auth/methods/auth/auth_platform_factory.dart';
 import 'package:house/auth/methods/loacl_auth/local_auth_methods.dart';
 import 'package:house/bootstrap.dart';
-
+import 'package:house/fcm_service.dart';
+import 'package:house/firebase_options.dart';
 import 'package:house/firestore/firestore_repo.dart';
+import 'package:house/helper.dart';
+import 'package:house/notification/customer/customer_notification_paginate.dart/customer_notification_paginate_cubit.dart';
+import 'package:house/notification/customer/remote_messages/remote_messages_cubit.dart';
 import 'package:house/router/router.dart';
 import 'package:local_auth/local_auth.dart';
 
 final auth = FirebaseAuth.instance;
 final store = FirebaseFirestore.instance;
+final analytics = FirebaseAnalytics.instance;
 
 final firestoreRepo = FireStoreRepo();
 
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await saveMessageToPrefs(message);
+}
+
 Future<void> main() async {
   await bootstrap();
-
+// await clearPreferences();
   runApp(
     MultiRepositoryProvider(
       providers: [
@@ -43,6 +57,11 @@ Future<void> main() async {
           BlocProvider(
             create: (context) => UserRoleCubit()..init(),
           ),
+          BlocProvider(
+            create: (context) => CustomerNotificationPaginate(),
+          ),
+          BlocProvider(
+              create: (context) => RemoteMessages()..loadMessagesFromPrefs()),
         ],
         child: const App(),
       ),

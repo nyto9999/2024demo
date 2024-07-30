@@ -30,10 +30,5 @@ class MasterMyTxsPaginate extends Cubit<MasterMyTxsPaginateState> {
           lastDocument: lastDocument,
           pageSize: pagination.pageSize);
     });
-
-    pagination.stream.listen((txs$) {
-      emit(MasterMyTxPaginating(txs: txs$, hasMore: pagination.hasMore));
-      debugPrint('已經加載了 ${txs$.length} 條數據');
-    });
   }
 }

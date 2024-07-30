@@ -23,16 +23,12 @@ class CustomerMyTxsPaginate extends Cubit<CustomerMyTxsPaginateState> {
 
     pagination.paginateUntilMax((lastDocument) {
       // function
+      debugPrint('c_paginateUntilMax $text');
       return repo.paginateCustomerMyTxs(
           tabText: text,
           customerId: uid,
           lastDocument: lastDocument,
           pageSize: pagination.pageSize);
-    });
-
-    pagination.stream.listen((txs$) {
-      emit(CustomerMyTxsPaginating(txs: txs$, hasMore: pagination.hasMore));
-      debugPrint('已經加載了 ${txs$.length} 條數據');
     });
   }
 

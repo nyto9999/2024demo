@@ -113,15 +113,7 @@ class FireStoreRepo {
     await ref.set(transaction.copyWith(id: ref.id).toMap(ServerTimeStamp.no));
   }
 
-  Future<void> updateTxPostStatus({
-    required String transactionId,
-    required String status,
-  }) async {
-    final transactionRef =
-        store.collection(Const.transactions).doc(transactionId);
-
-    await transactionRef.update({'postStatus': status});
-  }
+  
 
   Future<void> updateTxReviewed({
     required String transactionId,
@@ -345,17 +337,23 @@ class FireStoreRepo {
     }
   }
 
-  //get fcm token
+  //
+  Future<QuerySnapshot<Map<String, dynamic>>> paginateMessages(
+      {required String uid,
+      DocumentSnapshot? lastDocument,
+      int pageSize = 10}) async {
+    Query<Map<String, dynamic>> query = store
+        .collection(Const.userRoles)
+        .doc(uid)
+        .collection(Const.messages)
+        .orderBy('timestamp', descending: true)
+        .limit(pageSize);
 
-  Future<String> getFcmToken(String uid) async {
-    final userRoleDoc = store.collection(Const.userRoles).doc(uid);
-    final doc = await userRoleDoc.get();
-    final data = doc.data();
-    if (data != null && data.containsKey('fcmToken')) {
-      return data['fcmToken'] as String;
-    } else {
-      throw Exception('fcmToken is missing or null');
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument);
     }
+
+    return query.get();
   }
 }
 

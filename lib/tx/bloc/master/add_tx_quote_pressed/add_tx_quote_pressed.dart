@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:house/fcm_service.dart';
 import 'package:house/firestore/exception/post_exception.dart';
 import 'package:house/firestore/firestore_repo.dart';
 import 'package:house/firestore/model/quote.dart';
@@ -39,7 +38,7 @@ class AddTxQuotePressed extends Cubit<AddTxQuotePressedState> {
       //function
       await firestoreRepo.addQuote(quote: quote);
 
-      await sendNotification(customerId!);
+ 
 
       emit(AddTxQuotePressedSuccess());
     } on PostStatusException catch (e) {
@@ -48,13 +47,5 @@ class AddTxQuotePressed extends Cubit<AddTxQuotePressedState> {
       emit(AddTxQuotePressedError(e.toString()));
     }
   }
-
-  Future<void> sendNotification(String customerId) async {
-    final token = await firestoreRepo.getFcmToken(customerId);
-    // await FcmService().sendNotification(
-    //   title: '報價通知',
-    //   body: '您有一個新的報價',
-    //   token: token,
-    // );
-  }
+ 
 }

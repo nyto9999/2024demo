@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.5.0-152 <4.0.0'
+  sdk: '>=3.4.3 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -57,12 +57,14 @@ dependencies:
   flutter_easyloading: ^3.0.5
   pinput: ^5.0.0
   equatable: ^2.0.5
-  json: ^0.20.2
+  shared_preferences: ^2.2.3
   uuid: ^4.4.2
   intl: ^0.19.0
   rxdart: ^0.28.0
   firebase_messaging: ^15.0.3
   http: ^1.2.2
+  badges: ^3.1.2
+  firebase_analytics_web: ^0.5.9+1
  
  
 

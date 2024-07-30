@@ -1,40 +1,38 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:house/firestore/firestore_repo.dart';
 import 'package:house/firestore/pagination.dart';
 import 'package:house/main.dart';
 
-part 'txs_paginate_state.dart';
+part 'customer_notification_paginate_state.dart';
 
-//master
-class TxsPaginate extends Cubit<TxsPaginateState> {
+class CustomerNotificationPaginate
+    extends Cubit<CustomerNotificationPaginateState> {
   final FireStoreRepo repo;
   final Pagination pagination;
-  final String uid;
+  String uid;
 
-  TxsPaginate()
-      : uid = auth.currentUser?.uid ?? '',
+  CustomerNotificationPaginate()
+      : uid = auth.currentUser!.uid,
         pagination = Pagination(pageSize: 10),
         repo = firestoreRepo,
-        super(TxsPaginateInitial()) {
-    _init(uid);
-  }
+        super(CustomerNotificationPaginateInitial());
 
-  void _init(String uid) {
+  void paginate() {
+    debugPrint('paginate messages');
+
     // function
     pagination.paginateUntilMax((lastDocument) {
-      return repo.paginateMasterTxs(
+      return repo.paginateMessages(
         uid: uid,
         lastDocument: lastDocument,
         pageSize: pagination.pageSize,
       );
     });
-  }
 
-  Future<void> refreshTransactions() async {
-    await pagination.refresh();
-    _init(uid);
+  
   }
 
   @override

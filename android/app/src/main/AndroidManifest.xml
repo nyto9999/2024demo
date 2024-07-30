@@ -1,12 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 使用生物识别权限 -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
-    <uses-permission android:name="android.permission.INTERNET" /> 
+    <!-- 使用互联网权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 访问网络状态权限 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
     <application
         android:enableOnBackInvokedCallback="true"
         android:label="house"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -16,10 +21,8 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
-            <!-- Specifies an Android theme to apply to this Activity as soon as
-                 the Android process has started. This theme is visible to the user
-                 while the Flutter UI initializes. After that, this theme continues
-                 to determine the Window background behind the Flutter UI. -->
+            
+            <!-- 指定在 Android 进程启动时应用的主题。这一主题在 Flutter UI 初始化之前对用户可见。 -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
@@ -29,23 +32,31 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!-- Don't delete the meta-data below.
-             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        
+        <!-- 不要删除以下 meta-data。Flutter 工具用它来生成 GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        
+        <!-- 指定默认通知通道 ID -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="default_channel" />
+        
+        <!-- 禁用 Firebase Messaging 自动初始化 -->
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
             android:value="false" />
+        
+        <!-- 禁用 Firebase Analytics 数据收集 -->
         <meta-data
             android:name="firebase_analytics_collection_enabled"
             android:value="false" />
+ 
     </application>
-    <!-- Required to query activities that can process text, see:
-         https://developer.android.com/training/package-visibility and
-         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
-
-         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+    
+    <!-- 允许查询可以处理文本的活动 -->
+    <!-- 参见: https://developer.android.com/training/package-visibility -->
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>

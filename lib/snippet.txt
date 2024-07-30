@@ -1,0 +1,9 @@
+
+npm run lint -- --fix
+
+flutter run -d chrome --web-hostname localhost --web-port 5000
+
+firebase deploy --only functions
+
+//firebase 加入新的extension後，要重新configure
+flutterfire configure
