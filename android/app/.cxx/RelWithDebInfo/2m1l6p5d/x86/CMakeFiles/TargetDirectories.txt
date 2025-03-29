@@ -1,0 +1,2 @@
+/Users/yuhsuan/Documents/auto/android_apk/android/app/.cxx/RelWithDebInfo/2m1l6p5d/x86/CMakeFiles/edit_cache.dir
+/Users/yuhsuan/Documents/auto/android_apk/android/app/.cxx/RelWithDebInfo/2m1l6p5d/x86/CMakeFiles/rebuild_cache.dir
